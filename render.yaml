@@ -1,8 +1,8 @@
 databases:
   - name: Django1db
     plan: free
-    databaseName: Django1
-    user: Django1
+    databaseName: 'postgres'
+    user: 'postgres'
 
 services:
   - type: web
