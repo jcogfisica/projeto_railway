@@ -16,6 +16,10 @@ como informações do banco de dados, configurações de arquivos estáticos e m
 Ele permite que você personalize o comportamento do seu aplicativo, adaptando-o às suas necessidades específicas.
 O arquivo settings.py geralmente está localizado na pasta raiz do seu projeto Django, junto com o arquivo manage.py.
 """
+
+# Import dj-database-url at the beginning of the file.
+import dj_database_url
+
 from pathlib import Path
 
 import whitenoise
@@ -60,13 +64,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core' # aplicação recém-criada
+    'core'  # aplicação recém-criada
 ]
 
 # MIDDLEWARE: Define a ordem de execução dos middlewares, que são componentes que atuam em requisições e respostas.
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # configuração necessária para permitir que o Django (em parceria com a biblioteca whitenoise) processe arquivos estáticos quando o projeto estiver em produção
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # configuração necessária para permitir que o Django (em parceria com a biblioteca whitenoise) processe arquivos estáticos quando o projeto estiver em produção
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,15 +86,14 @@ ROOT_URLCONF = 'Django1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'], # Diretório de templates: criamos um diretório de templates para cada aplicação
+        'DIRS': ['templates'],  # Diretório de templates: criamos um diretório de templates para cada aplicação
 
         # O que nós queremos dizer com a linha acima?
         # Estamos indicando para o projeto Django que, dentro de nossas aplicações (diretório core),
         # teremos um diretório chamado "templates", dentro do qual colocaremos nossos
         # templates (p. ex., nossas páginas html).
 
-        
-        'APP_DIRS': True, # Quando 'APP_DIRS': True, queremos dizer que cada aplicação terá seu diretório de templates
+        'APP_DIRS': True,  # Quando 'APP_DIRS': True, queremos dizer que cada aplicação terá seu diretório de templates
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -104,14 +108,21 @@ WSGI_APPLICATION = 'Django1.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 # DATABASES: Configura as informações de conexão com o banco de dados, como tipo, nome do banco, usuário, senha, etc.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+# Replace the SQLite DATABASES configuration with PostgreSQL:
+# DATABASES = {
+# 'default': dj_database_url.config(
+# Replace this value with your local database's connection string.
+# default='postgresql://postgres:postgres@localhost:5432/mysite',
+# conn_max_age=600
+# )
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -131,7 +142,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -143,12 +153,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 # STATIC_URL e STATIC_ROOT: Configura o local onde os arquivos estáticos (CSS, JS, imagens, etc.) são servidos.
-STATIC_URL = 'static/' # usado durante o desenvolvimento
-STATIC_ROOT = Path(BASE_DIR / 'staticfiles') # usado durante a produção; path para o diretorio de arquivos estáticos
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
+# This setting informs Django of the URI path from which your static files will be served to users
+# Here, they well be accessible at your-domain.onrender.com/static/... or yourcustomdomain.com/static/...
+STATIC_URL = '/static/'
+# This production code might break development mode, so we check whether we're in DEBUG mode
+if not DEBUG:
+    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
+    STATIC_ROOT = Path(BASE_DIR / 'staticfiles')
+    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
+    # and renames the files with unique names for each version to support long-term caching
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Em um projeto Django podemos ter várias aplicações; durante o desenvolvimento, os arquivos estáticos ficarão salvos dentro de um diretório chamado static, para cada aplicação.
 # Contudo, quando publicamos o projeto, nós executamos um comando, o qual irá coletar todos os arquivos estáticos dentro de cada diretório static dentro de cada aplicação.
 # Um tal comando "depositará" todos os arquivos estáticos coletados centralizando-os no diretório staticfiles.
@@ -160,5 +177,4 @@ STATIC_ROOT = Path(BASE_DIR / 'staticfiles') # usado durante a produção; path 
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-LOGOUT_REDIRECT_URL = 'index' # Após o logout redireciona para o diretório raiz da aplicação
+LOGOUT_REDIRECT_URL = 'index'  # Após o logout redireciona para o diretório raiz da aplicação
