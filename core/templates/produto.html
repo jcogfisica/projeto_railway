@@ -1,0 +1,28 @@
+{%  load static %} <!-- Informa que o template irá carregar arquivos estáticos -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Produto</title>
+    <link rel = 'stylesheet' href = '{%  static "css/estilos.css" %}'> <!-- informa que um arquivo estático css tem a rota static/css/estilos.css -->
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th> Produto </th>
+                <th> Preço </th>
+                <th> Estoque </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href='{% url 'index' %}'> {{ produto.nome }} </a></td> <!-- Ancoramos a url ou rota chamada 'index' no nome de cada produto -->
+                <td> {{ produto.preco }}</td> <!-- Exibimos no corpo da tabela os atributos nome, preco e estoque do valor associado à chave produto do dicionário context informado como argumento da função render na view produto -->
+                <td> {{ produto.estoque }} </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
