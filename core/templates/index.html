@@ -7,9 +7,8 @@
     <link rel = 'stylesheet' href = '{%  static "css/estilos.css" %}'> <!-- informa que um arquivo estático css tem a rota static/css/estilos.css -->
 </head>
 <body>
-    <center>
     <h1>Index</h1>
-    <img src = '{%  static "images/django.png" %}' <!-- informa que um arquivo estático de imagem tem a rota static/images/django.png -->
+    <img src = '{%  static "images/django.png" %}'/> <!-- informa que um arquivo estático de imagem tem a rota static/images/django.png -->
     <h2>{{ curso }}</h2> <!-- Em um subtítulo com nível hierárquico h2, mostramos o valor associado à chave curso no dicionário context -->
     <h3>{{ outro }}</h3> <!-- Em um subtítulo com nível hierárquico h3, mostramos o valor associado à chave outro no dicionário context -->
     <h4>{{  logado  }}</h4>
@@ -28,11 +27,10 @@
                 <td> {{ produto.preco }}</td>
                 <!-- <td> {{ produto.estoque }}</td> -->
             </tr>
-        </tbody>
         {%  endfor %}
+        </tbody>
     </table>
     <button onclick = "teste();">Clique em mim!</button>
-    </center>
     <script type = "text/javascript" src = '{% static "js/teste.js" %}'></script> <!-- informa que um arquivo estático js tem a rota static/js/teste.js -->
 </body>
 </html>
