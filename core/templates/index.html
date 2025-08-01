@@ -1,36 +1,38 @@
-{%  load static %} <!-- Informa que o template irá carregar arquivos estáticos -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Django 1 - Index</title>
-    <link rel = 'stylesheet' href = '{%  static "css/estilos.css" %}'> <!-- informa que um arquivo estático css tem a rota static/css/estilos.css -->
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
 </head>
 <body>
     <h1>Index</h1>
-    <img src = '{%  static "images/django.png" %}'/> <!-- informa que um arquivo estático de imagem tem a rota static/images/django.png -->
-    <h2>{{ curso }}</h2> <!-- Em um subtítulo com nível hierárquico h2, mostramos o valor associado à chave curso no dicionário context -->
-    <h3>{{ outro }}</h3> <!-- Em um subtítulo com nível hierárquico h3, mostramos o valor associado à chave outro no dicionário context -->
-    <h4>{{  logado  }}</h4>
+    <img src="{% static 'images/django.png' %}" alt="Logo Django">
+    <h2>{{ curso }}</h2>
+    <h3>{{ outro }}</h3>
+    <h4>{{ logado }}</h4>
+
     <table>
         <thead>
             <tr>
-                <th> Produto </th>
-                <th> Preço </th>
-                <!-- <th> Estoque </th> -->
+                <th>Produto</th>
+                <th>Preço</th>
             </tr>
         </thead>
         <tbody>
-        {%  for produto in produtos %} <!-- Iterando sobre o objeto produtos dentro do próprio template html; esse objeto é o valor associado à chave produtos do dicionário context informado como argumento da função render na view index -->
+        {% for produto in produtos %}
             <tr>
-                <td><a href='{% url 'produto' produto.id %}'> {{ produto.nome }} </a></td> <!-- Ancoramos a url chamada 'produto' no nome de cada produto -->
-                <td> {{ produto.preco }}</td>
-                <!-- <td> {{ produto.estoque }}</td> -->
+                <td><a href="{% url 'produto' produto.id %}">{{ produto.nome }}</a></td>
+                <td>{{ produto.preco }}</td>
             </tr>
-        {%  endfor %}
+        {% endfor %}
         </tbody>
     </table>
-    <button onclick = "teste();">Clique em mim!</button>
-    <script type = "text/javascript" src = '{% static "js/teste.js" %}'></script> <!-- informa que um arquivo estático js tem a rota static/js/teste.js -->
+
+    <button onclick="teste();">Clique em mim!</button>
+
+    <!-- Importa o script JS com a função teste() -->
+    <script type="text/javascript" src="{% static 'js/teste.js' %}"></script>
 </body>
 </html>
